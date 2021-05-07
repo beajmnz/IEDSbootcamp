@@ -23,8 +23,16 @@ you can concatenate a couple of ranges with command chain from itertools library
 itertools.chain(range(5),range(10)) is a vector with values 0, 1, 2, …4, 0, 1, 2, … 9
 """
 
-for i in range(1,9):
-    if(i < 5):
+height = 15
+
+for i in range(1,height):
+    if(i < height/2):
         print("*"*i)
     else:
-        print("*"*(9-i))
+        print("*"*(height-i))
+        
+        
+## OPTION 2
+
+import itertools
+
