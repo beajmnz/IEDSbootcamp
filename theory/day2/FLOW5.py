@@ -20,17 +20,18 @@ firstRand = random.randint(1,20)
 secondRand = random.randint(1,20)
 
 addition = firstRand + secondRand
-floorDivision = firstRand / secondRand
+floorDivision = firstRand // secondRand
 
-guessedNumber = 0
+print("I have thought of two numbers. Their sum is",addition,
+      "and their floor division is",floorDivision,"\n.")
 
-while  guessedNumber != randomNumber:
+guessedNumber1 = int(input('Guess the first nummber\n'))
+guessedNumber2 = int(input('Guess the second nummber\n'))
 
-    guessedNumber = int(input('Guess the nummber\n'))
+while  (guessedNumber1 != firstRand) and (guessedNumber2 != secondRand):
 
-    if guessedNumber < randomNumber:
-        print('higher! keep trying')
-    else: 
-        print('lower! keep trying')        
+    guessedNumber1 = int(input('Nice try! Guess the first nummber\n'))
+    guessedNumber2 = int(input('Guess the second nummber\n'))
+
         
 print('congrats!')
