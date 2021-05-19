@@ -67,11 +67,9 @@ directors.sort_values(by=["Gender", "Salary"], ascending=[0, 0])
 
 # 1.6. How many bookings are there by day? And by day and time?
 
-bookings.loc[:, ["day", "time"]].groupby(by=["day"], as_index=False).count()
+bookings.groupby(by=["day"], as_index=False).size()
 
-bookings.loc[:, ["day", "time", "restaurant"]].groupby(
-    by=["day", "time"], as_index=False
-).count()
+bookings.groupby(by=["day", "time"], as_index=False).size()
 
 # 1.7. How much was the total bill for the Café restaurants? And how many
 # bookings did we have for these café restaurants? (Do not use merge)
@@ -101,7 +99,7 @@ print(
 # 3.1. Add a column named "Number Of Directors" in Restaurants. How many directors are there by country?
 
 # first we get the number of directors for each restaurant
-dir_per_rest = directors.groupby(by="Restaurant", as_index=False).Id.count()
+dir_per_rest = directors.groupby(by="Restaurant", as_index=False).size()
 dir_per_rest.columns = ["Code", "# of directors"]
 # then we merge the two tables
 rest_directors = pd.merge(left=restaurants, right=dir_per_rest, on="Code", how="left")
