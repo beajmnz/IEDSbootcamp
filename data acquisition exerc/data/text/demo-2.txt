@@ -1,0 +1,13 @@
+Integers,Floats,Timestamps,Categoricals,String
+1.0,1.1,2021-01-01,vowel,a
+,2.2,2021-01-02,consonant,b
+3.0,,2021-01-03,consonant,c
+4.0,4.4,,consonant,d
+5.0,5.5,2021-01-05,,e
+6.0,6.6,2021-01-06,consonant,
+7.0,7.7,2021-01-07,consonant,g
+8.0,8.8,2021-01-08,consonant,h
+9.0,9.9,2021-01-09,vowel,i
+10.0,10.0,2021-01-10,consonant,j
+11.0,11.0,2021-01-11,consonant,k
+12.0,12.0,2021-01-12,consonant,l

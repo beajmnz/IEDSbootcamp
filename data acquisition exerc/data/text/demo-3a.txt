@@ -1,0 +1,4 @@
+Country;Capital
+Spain;Madrid
+France;Paris
+Germany;Berlin

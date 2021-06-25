@@ -1,0 +1,19 @@
+[
+  {
+    "Tag": "IE",
+    "Name": "Instituto de Empresa, S.L.",
+    "Location": {
+      "Address": "Calle Mar\u00eda de Molina, 13",
+      "City": "Madrid",
+      "CA": "Comunidad de Madrid"
+    }
+  },
+  {
+    "Name": "IE Universidad",
+    "Location": {
+      "Address": "Calle Cardenal Zu\u00f1iga, 12",
+      "City": "Segovia",
+      "CA": "Castilla y Le\u00f3n"
+    }
+  }
+]

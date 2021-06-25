@@ -39,18 +39,38 @@ print(
     "from events.",
 )
 
+print("${:,.2f}".format(directors.Salary.sum()), "are spent in salaries.")
+
 
 """Pandas Review"""
 # 1.1 Show the total capacity by country
 
-restaurants.loc[:, ["Country", "Capacity"]].groupby(
-    by=["Country"], as_index=False
-).sum().sort_values(by="Capacity", ascending=0)
+print(
+    restaurants.loc[:, ["Country", "Capacity"]]
+    .groupby(by=["Country"], as_index=False)
+    .sum()
+    .sort_values(by="Capacity", ascending=0)
+)
 
 # 1.2. Which is the percentage of restaurants by type in every country?
+
+pd.options.display.float_format = "{:.2%}".format
+pd.crosstab(restaurants.Type, restaurants.Country, normalize="columns")
+pd.reset_option("display.float_format")
+
 # 1.3. How many different nationalities are there in the employees table?
 
-employees.loc[:, ["Nationality"]].drop_duplicates().shape[0]
+print(
+    "There are",
+    employees.loc[:, ["Nationality"]].drop_duplicates().shape[0],
+    "different nationalities",
+)
+# other option
+print(
+    "There are",
+    employees.Nationality.nunique(),
+    "different nationalities",
+)
 
 # 1.4. Which is the average salary for the directors over 35. How many directors are?
 
@@ -69,7 +89,15 @@ directors.sort_values(by=["Gender", "Salary"], ascending=[0, 0])
 
 bookings.groupby(by=["day"], as_index=False).size()
 
+# option 2
+bookings.day.value_counts()
+###
+
 bookings.groupby(by=["day", "time"], as_index=False).size()
+
+# option 2
+pd.crosstab(bookings.day, bookings.time)
+###
 
 # 1.7. How much was the total bill for the Café restaurants? And how many
 # bookings did we have for these café restaurants? (Do not use merge)
@@ -81,12 +109,20 @@ print(
     "There where",
     bookings.loc[bookings.restaurant.isin(cafe_rest), :].shape[0],
     "bookings in cafe restaurants for a total of",
-    "{:,.2f}".format(
+    "${:,.2f}".format(
         bookings.loc[bookings.restaurant.isin(cafe_rest), :].total_bill.sum()
     ),
 )
 
-# 1.8. Add a category column in "Directors" based on the Salary: A (>45k), C (<20k), B (other cases)
+# 1.8. Add a category column in "Directors" based on the Salary: A (>45k),
+# C (<20k), B (other cases)
+
+directors["Salary_cat"] = pd.cut(
+    directors["Salary"],
+    bins=[0, 20000, 45000, 100000000000],
+    labels=["C", "B", "A"],
+)
+
 
 """Plotnine review
 2.1. Are correlated the variables Age and Salary for the directors? Repeat the graph showing the director's gender as well.
@@ -142,9 +178,47 @@ empl_and_bill.sort_values(by="total_bill", ascending=0).drop_duplicates(
 )
 
 
-# 3.5. Calculate the capacity and total clients attended by restaurant. Show the proportion and show the top 3 restaurants
-# 3.6. How much money earned in tips the oldest waiter? How many breakfasts, lunches and dinners did he work?
+# 3.5. Calculate the capacity and total clients attended by restaurant. Show the
+# proportion and show the top 3 restaurants
+
+clients_per_rest = (
+    bookings.loc[:, ["restaurant", "clients"]].groupby(by="restaurant").sum()
+)
+rest_and_clients = pd.merge(
+    left=restaurants,
+    right=clients_per_rest,
+    how="left",
+    left_on="Code",
+    right_on="restaurant",
+)
+rest_and_clients["cap_rate"] = rest_and_clients.clients / rest_and_clients.Capacity
+rest_and_clients.sort_values(by="cap_rate", ascending=0).head(3)
+
+
+# 3.6. How much money earned in tips the oldest waiter?
+# How many breakfasts, lunches and dinners did he work?
+
+oldest_waiterId = employees.sort_values(by="Age", ascending=0).head(1).WaiterId[0]
+bookings.loc[bookings.waiter.eq(oldest_waiterId), :].tip.sum()
+bookings.loc[bookings.waiter.eq(oldest_waiterId), :].time.value_counts()
+
 # 3.7. How many events by type were sold by female directors? Which was the total price for these events?
+# 3.8. Show how many A, B and C directors we have by restaurant location (country) [Note: A,B,C were calculated in exercise 1.8)
+# 3.9. Calculate the average price of the events by event type and restaurant type
+
+ev = events.loc[:, ["Price", "Type", "Restaurant"]]
+rest = restaurants.loc[:, ["Code", "Type"]]
+
+ev_per_rest = pd.merge(ev, rest, left_on="Restaurant", right_on="Code", how="left")
+ev_per_rest.rename(
+    columns={"Type_x": "EventType", "Type_y": "RestaurantType"}, inplace=True
+)
+ev_per_rest.groupby(by=["EventType", "RestaurantType"], as_index=False).mean()
+
+# 3.10. Build a table to show by restaurant these variables: clients attended in bookings, clients attended in events,number of events and total capacity of the restaurant
+# 3.8. Show how many A, B and C directors we have by restaurant location (country) [Note: A,B,C were calculated in exercise 1.8)
+# 3.9. Calculate the average price of the events by event type and restaurant type
+# 3.10. Build a table to show by restaurant these variables: clients attended in bookings, clients attended in events,number of events and total capacity of the restaurant
 # 3.8. Show how many A, B and C directors we have by restaurant location (country) [Note: A,B,C were calculated in exercise 1.8)
 # 3.9. Calculate the average price of the events by event type and restaurant type
 # 3.10. Build a table to show by restaurant these variables: clients attended in bookings, clients attended in events,number of events and total capacity of the restaurant
